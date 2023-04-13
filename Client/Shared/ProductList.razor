@@ -1,0 +1,45 @@
+﻿@inject IProductService ProductService
+
+
+<div class="container">
+    <div class="card-container">
+
+        @foreach (var product in CategoryId == null ? ProductService.Products : ProductService.Products.Where(p => p.CategoryId == CategoryId))
+        {
+
+            <div class="cardd">
+                <div>
+                    <a href="/product/@product.Id">
+                        <img class="card-img" src="@product.Image" alt="@product.Title" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <a href="/product/@product.Id">
+                        <h4 class="mb-0">@product.Title</h4>
+                    </a>
+                    @if (product.OriginalPrice > product.Price)
+                    {
+                        <h6 class="text-muted original-price">$@product.OriginalPrice</h6>
+                        <h5 class="price">
+                            $@product.Price
+                        </h5>
+                    }
+                </div>
+
+            </div>
+
+        }
+    </div>
+
+</div>
+
+
+@code {
+    [Parameter]
+    public int? CategoryId { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        ProductService.LoadProducts();
+    }
+}
